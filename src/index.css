@@ -1,28 +1,5 @@
-/* Starting styles — your assistant may change this file. */
-* { box-sizing: border-box; }
-body { margin: 0; font-family: system-ui, sans-serif; line-height: 1.5; color: #1d1d1f; background: #fafafa; }
-main { max-width: 960px; margin: 0 auto; padding: 8px 16px 96px; }
-button { min-height: 44px; padding: 0 14px; font: inherit; cursor: pointer; }
-input, textarea { font: inherit; }
-.search { display: flex; flex-direction: column; gap: 4px; margin: 12px 0; }
-.search input { min-height: 44px; padding: 0 10px; }
-.layout { display: grid; gap: 16px; grid-template-columns: 1fr; }
-.products { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
-.card, .cart { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 12px; }
-.card h2, .cart h2 { margin: 0 0 4px; font-size: 1.1rem; overflow-wrap: anywhere; }
-.actions { display: flex; flex-wrap: wrap; gap: 8px; }
-@media (min-width: 768px) { .layout { grid-template-columns: 1fr 260px; align-items: start; } }
-.site-header { max-width: 960px; margin: 0 auto; padding: 16px 16px 0; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
-.site-header h1 { margin: 0; }
-.site-header p { margin: 0; font-weight: 600; }
-.side { display: grid; gap: 16px; }
-.panel { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 12px; }
-.panel h2 { margin: 0 0 4px; font-size: 1.1rem; }
-.panel ul { margin: 0; padding-left: 20px; overflow-wrap: anywhere; }
-button[aria-pressed="true"] { background: #1d1d1f; color: #fff; }
-.checkout { display: grid; gap: 12px; margin-top: 12px; }
-.field { display: flex; flex-direction: column; gap: 4px; }
-.field input, .field textarea { padding: 8px 10px; min-height: 44px; width: 100%; }
-.error { margin: 0; color: #b00020; font-size: 0.9rem; }
-.counter { margin: 0; font-size: 0.85rem; color: #555; text-align: right; }
-.confirmation { min-height: 1.5em; font-weight: 600; }
+/* Bootstrap (imported in main.jsx from node_modules) does the layout and look.
+   Only what it does not cover is here. */
+body { background: #f6f7f9; }
+.btn { min-height: 44px; }
+.form-control { min-height: 44px; }

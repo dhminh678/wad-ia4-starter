@@ -27,15 +27,17 @@ export default function App() {
   return (
     <WishlistProvider>
       <Header />
-      <main>
+      <main className="container pb-5">
         <SearchBox value={query} onChange={setQuery} />
-        <p role="status">{message}</p>
+        <p role="status" className="my-2">{message}</p>
         {status === 'error' && (
-          <button type="button" onClick={retry}>Retry</button>
+          <button type="button" className="btn btn-primary mb-3" onClick={retry}>Retry</button>
         )}
-        <div className="layout">
-          <ProductList products={products} onAdd={addToCart} />
-          <div className="side">
+        <div className="row g-4">
+          <div className="col-lg-8">
+              <ProductList products={products} onAdd={addToCart} />
+            </div>
+          <div className="col-lg-4 d-grid gap-3 align-content-start">
             <SavedPanel />
             <CartSummary items={cart} onOrder={() => setCart([])} />
           </div>

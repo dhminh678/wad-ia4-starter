@@ -37,46 +37,49 @@ export default function CheckoutForm({ count, total, onOrder }) {
   };
 
   return (
-    <form aria-label="Checkout" onSubmit={handleSubmit} noValidate className="checkout">
-      <div className="field">
-        <label htmlFor="co-name">Name</label>
+    <form aria-label="Checkout" onSubmit={handleSubmit} noValidate className="d-grid gap-3 mt-3">
+      <div>
+        <label htmlFor="co-name" className="form-label">Name</label>
         <input
           id="co-name"
           type="text"
+          className={showName ? 'form-control is-invalid' : 'form-control'}
           value={name}
           onChange={(e) => setName(e.target.value)}
           aria-invalid={showName ? 'true' : undefined}
           aria-describedby={showName ? 'co-name-error' : undefined}
         />
-        {showName && <p id="co-name-error" className="error">{NAME_MSG}</p>}
+        {showName && <p id="co-name-error" className="text-danger small mt-1 mb-0">{NAME_MSG}</p>}
       </div>
-      <div className="field">
-        <label htmlFor="co-phone">Phone</label>
+      <div>
+        <label htmlFor="co-phone" className="form-label">Phone</label>
         <input
           id="co-phone"
           type="tel"
+          className={showPhone ? 'form-control is-invalid' : 'form-control'}
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           aria-invalid={showPhone ? 'true' : undefined}
           aria-describedby={showPhone ? 'co-phone-error' : undefined}
         />
-        {showPhone && <p id="co-phone-error" className="error">{PHONE_MSG}</p>}
+        {showPhone && <p id="co-phone-error" className="text-danger small mt-1 mb-0">{PHONE_MSG}</p>}
       </div>
-      <div className="field">
-        <label htmlFor="co-note">Note (optional)</label>
+      <div>
+        <label htmlFor="co-note" className="form-label">Note (optional)</label>
         <textarea
           id="co-note"
+          className="form-control"
           rows={3}
           maxLength={NOTE_MAX}
           value={note}
           onChange={(e) => setNote(e.target.value)}
           aria-describedby="co-note-count"
         />
-        <p id="co-note-count" className="counter">{note.length}/{NOTE_MAX}</p>
+        <p id="co-note-count" className="text-secondary small text-end mt-1 mb-0">{note.length}/{NOTE_MAX}</p>
       </div>
-      {showCart && <p className="error" role="alert">{CART_MSG}</p>}
-      <button type="submit">Place order</button>
-      <div aria-live="polite" className="confirmation">{confirmation}</div>
+      {showCart && <p className="text-danger small m-0" role="alert">{CART_MSG}</p>}
+      <button type="submit" className="btn btn-success">Place order</button>
+      <div aria-live="polite" className="fw-semibold">{confirmation}</div>
     </form>
   );
 }
