@@ -2,6 +2,9 @@ import { useState } from 'react';
 import SearchBox from './components/SearchBox.jsx';
 import ProductList from './components/ProductList.jsx';
 import CartSummary from './components/CartSummary.jsx';
+import Header from './components/Header.jsx';
+import SavedPanel from './components/SavedPanel.jsx';
+import { WishlistProvider } from './WishlistContext.jsx';
 import { useProducts } from './useProducts.js';
 
 export default function App() {
@@ -22,17 +25,22 @@ export default function App() {
   else if (products.length === 0) message = 'No products match.';
 
   return (
-    <main>
-      <h1>Shop</h1>
-      <SearchBox value={query} onChange={setQuery} />
-      <p role="status">{message}</p>
-      {status === 'error' && (
-        <button type="button" onClick={retry}>Retry</button>
-      )}
-      <div className="layout">
-        <ProductList products={products} onAdd={addToCart} />
-        <CartSummary items={cart} />
-      </div>
-    </main>
+    <WishlistProvider>
+      <Header />
+      <main>
+        <SearchBox value={query} onChange={setQuery} />
+        <p role="status">{message}</p>
+        {status === 'error' && (
+          <button type="button" onClick={retry}>Retry</button>
+        )}
+        <div className="layout">
+          <ProductList products={products} onAdd={addToCart} />
+          <div className="side">
+            <SavedPanel />
+            <CartSummary items={cart} />
+          </div>
+        </div>
+      </main>
+    </WishlistProvider>
   );
 }
