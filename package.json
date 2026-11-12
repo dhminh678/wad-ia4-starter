@@ -1,0 +1,32 @@
+{
+  "name": "ia4-starter",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "CSC13008 IA#4 — React and a CSS framework, with a review of the AI-generated code",
+  "engines": {
+    "node": ">=18.18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "test": "vitest run",
+    "lint": "eslint src --max-warnings 0"
+  },
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "eslint": "^9.39.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.5.0",
+    "jsdom": "^26.1.0",
+    "vite": "^6.4.0",
+    "vitest": "^3.2.0"
+  }
+}
