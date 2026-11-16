@@ -36,6 +36,10 @@ export function useProducts(query) {
     return () => controller.abort();
   }, [debounced, attempt]);
 
-  const retry = () => setAttempt((n) => n + 1);
+  // Retry the text currently in the box, not an older debounced one.
+  const retry = () => {
+    setDebounced(query);
+    setAttempt((n) => n + 1);
+  };
   return { products, status, retry };
 }
