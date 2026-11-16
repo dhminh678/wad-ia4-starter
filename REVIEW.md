@@ -66,6 +66,13 @@ Rows below are the *Done means* rows of `README.md`; "run" means I ran it in Chr
 - **Why:** `retry` now calls `setDebounced(query)` as well as `setAttempt`. Both updates are batched, so the effect runs once and the request is for the current text.
 - **Sentence sent:** none from me. Found in the same second review; I answered "Có" (yes) to the offer to fix it.
 
+### 10. Abort check inside fetch promise resolution
+- **Where:** proposed in the 2026-11-16 review session, not committed; snippet: `if (controller.signal.aborted) return;` at the top of the second `.then` in `src/useProducts.js` line 27
+- **Decision:** rejected
+- **What decided it:** check C7 passes without this check; lines 20–36 of `src/useProducts.js` already abort via `AbortController` and catch `AbortError`; a throwaway test with the line added passes the same 19 checks (`npm test`) and lint (`npm run lint`), showing the line is redundant because an aborted fetch promise rejects before the second `.then` can run
+- **Why:** redundant defensive check that adds dead code without fixing any defect. When `controller.abort()` runs in cleanup, the fetch promise rejects and jumps straight to `.catch`, so `.then` is never reached upon abort.
+- **Sentence sent:** none from me. Proposed by the assistant; I decided to reject it.
+
 ---
 
-**Rejected:** none. Every row passed the first time it was run except the alignment in entry 6, so there is no entry where the assistant's output was thrown away.
+**Rejected:** entry 10. The assistant proposed adding an abort guard inside the second `.then` of `src/useProducts.js`, but `controller.abort()` already triggers `AbortError` and jumps to `.catch`, making the proposal redundant.

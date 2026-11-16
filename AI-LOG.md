@@ -43,3 +43,10 @@ Asked for: a check of the repository for mistakes. I did not ask for any particu
 Kept: the rest of the code; `npm test` 19 passed and `npm run lint` silent after both changes.
 Changed: `WishlistContext.jsx` now memoizes the context value (`useCallback`, `useMemo`), and `useProducts.js` `retry` sets the debounced text to the current text. These are REVIEW.md entries 8 and 9. I did not test either in the browser.
 Rejected: nothing.
+
+## 2026-11-16 — review of candidates and proposal to guard fetch abort
+Tool: Claude (chat).
+Asked for: review six potential candidate areas in the codebase to evaluate if any should be changed, kept, or rejected.
+Kept: candidates 1 to 5 (`useProducts.js` debounced state, `useProducts.js` response parsing, `CheckoutForm.jsx` `role="alert"`, `CheckoutForm.jsx` `aria-live="polite"`, `WishlistContext.jsx` computed `count`).
+Changed: nothing. No code modified in `src/`.
+Rejected: proposal to add `if (controller.signal.aborted) return;` at the start of the second `.then` in `src/useProducts.js`. Tested in an isolated throwaway environment: all 19 checks pass without it, because `controller.abort()` rejects the fetch promise with `AbortError` and jumps to `.catch`, making an in-promise abort check redundant. This is REVIEW.md entry 10.
