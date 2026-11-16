@@ -1,6 +1,6 @@
 # REVIEW.md — what the assistant wrote, and what I decided
 
-Commits (oldest first): `a537037` starter · `aa3c131` session 6 page · `23c4fb3` wishlist · `de1dd63` checkout form · `fac426b` Bootstrap · `4c1802f` grid alignment.
+Commits (oldest first): `a537037` starter · `aa3c131` session 6 page · `23c4fb3` wishlist · `de1dd63` checkout form · `fac426b` Bootstrap · `4c1802f` grid alignment · `eefc9b6` memoized wishlist context · `14054cf` Retry uses the current text.
 Rows below are the *Done means* rows of `README.md`; "run" means I ran it in Chromium against `npm run dev`, "read" means I read the lines.
 
 ### 1. Wishlist in one context, one provider above everything
@@ -51,6 +51,20 @@ Rows below are the *Done means* rows of `README.md`; "run" means I ran it in Chr
 - **What decided it:** row 18 run — `Tab` from the search box reaches `Place order` in 28 presses, in reading order. Measured `box-shadow` right after focus was `0px`, which looked like "no focus ring". Re-measured after 250 ms: a 4 px ring on Details, Add to cart, Save, Name, Phone, Note and Place order — the first number was taken in the middle of Bootstrap's 0.15 s transition.
 - **Why:** nothing to fix, so no CSS was added.
 - **Sentence sent:** none — nothing to correct
+
+### 8. Wishlist context value rebuilt on every render
+- **Where:** first version in commit 23c4fb3, `src/WishlistContext.jsx` line 19 (`value={{ saved, count: saved.length, isSaved, toggle }}`); fixed in commit eefc9b6, same file, lines 10–27
+- **Decision:** changed
+- **What decided it:** a line I read when I reviewed the code again after submitting: the `value` object and both functions were new on every render of `WishlistProvider`, so every `useWishlist()` consumer (all cards, `Header`, `SavedPanel`) re-rendered whenever the provider did. After the change `npm test` still reports 19 passed and `npm run lint` is silent. I did not measure the re-renders in React DevTools.
+- **Why:** `useCallback` for `isSaved` and `toggle`, `useMemo` for `value`, so consumers re-render only when `saved` changes. `count` is still `saved.length`, computed, not state (row 20 unchanged).
+- **Sentence sent:** none from me. The assistant found it in a second review of the repo and offered to fix it; I answered "Có" (yes).
+
+### 9. Retry sent the last debounced text, not the text in the box
+- **Where:** first version in commit aa3c131, `src/useProducts.js` line 39 (`const retry = () => setAttempt((n) => n + 1);`); fixed in commit 14054cf, same file, lines 39–43
+- **Decision:** changed
+- **What decided it:** a line I read: `retry` only bumped `attempt`, and the fetch effect uses `debounced`. If the request failed while a newer text was still waiting out the 250 ms debounce, Retry would repeat the older text. `brief.md` item 5 says Retry sends "the same search again", so this is a corner case, not a failing row. `npm test` 19 passed and lint silent after the change; I did not run Retry by hand for this case.
+- **Why:** `retry` now calls `setDebounced(query)` as well as `setAttempt`. Both updates are batched, so the effect runs once and the request is for the current text.
+- **Sentence sent:** none from me. Found in the same second review; I answered "Có" (yes) to the offer to fix it.
 
 ---
 

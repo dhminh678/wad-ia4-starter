@@ -36,3 +36,10 @@ Asked for: nothing — I did not ask for this. The assistant took a 360 px scree
 Kept: everything else; `npm test` 19 passed and all scripted rows pass again after the fix. A first reading of row 18 (`box-shadow: 0px` right after Tab) looked like a missing focus ring; re-measured after 250 ms every control has Bootstrap's 4 px ring, so the code was right and nothing was added.
 Changed: removed `m-0` from the product `<ul>` (`ProductList.jsx` line 5). It cancelled the negative margins of Bootstrap's `.row`, so the first card sat at 20 px while the search box, Saved and Cart sat at 12 px (90 vs 82 at 1280 px). After the fix both are 12 / 36 / 82 px at 360 / 768 / 1280. This is REVIEW.md entry 6.
 Rejected: nothing.
+
+## 2026-11-16 — second review of the repo, two small fixes
+Tool: Claude (chat), a new session after the submission commits.
+Asked for: a check of the repository for mistakes. I did not ask for any particular fix; the assistant listed two and I answered "Có" (yes) to fixing them. It gave me the changes as two patch files and I applied them with `git am`. Commits `eefc9b6` and `14054cf`.
+Kept: the rest of the code; `npm test` 19 passed and `npm run lint` silent after both changes.
+Changed: `WishlistContext.jsx` now memoizes the context value (`useCallback`, `useMemo`), and `useProducts.js` `retry` sets the debounced text to the current text. These are REVIEW.md entries 8 and 9. I did not test either in the browser.
+Rejected: nothing.
