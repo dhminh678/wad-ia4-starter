@@ -20,21 +20,21 @@ Rows below are the *Done means* rows of `README.md`; "run" means I ran it in Chr
 - **Where:** commit 23c4fb3, `src/WishlistContext.jsx` lines 7–20 (provider), 25–28 (hook); `src/App.jsx` lines 28–44 (the one `<WishlistProvider>`)
 - **Decision:** kept
 - **What decided it:** checks I1–I3 pass; row 14 run (save Cap and Jacket, search `hood`, clear: header `Saved: 2` throughout, panel lists Cap and Jacket, Cap's Save pressed again); row 15 read — exactly one provider, `App.jsx:28`, wrapping `Header`, the cards and `SavedPanel`
-- **Why:** the saved list lives above the product list, so a search that hides a card cannot lose it. `count` is `saved.length` (line 19), computed, not state (row 20). `ProductCard` calls `useWishlist()` (`ProductCard.jsx` line 7), no props. Alternative considered: passing wishlist props down through the component tree or having `Header` compute `saved.length` directly; exposing `count` in the context value centralises the computed property and decouples `Header` from raw array access.
+- **Why:** the saved list lives above the product list, so a search that hides a card cannot lose it. `count` is `saved.length` (line 19), computed, not state (row 20). `ProductCard` calls `useWishlist()` (`ProductCard.jsx` line 7), no props. Added in the 2026-11-16 review, not recorded when the code was written: an alternative was passing wishlist props down through the component tree or having `Header` compute `saved.length` directly; exposing `count` in the context value centralises the computed property and decouples `Header` from raw array access.
 - **Sentence sent:** none — nothing to correct
 
 ### 2. Checkout errors computed from the fields
 - **Where:** commit de1dd63, `src/components/CheckoutForm.jsx` lines 17–22 (`nameInvalid`, `phoneInvalid`, `cartEmpty`, `showName`, `showPhone`, `showCart`), lines 48–63 (`aria-invalid`, `aria-describedby`)
 - **Decision:** kept
 - **What decided it:** checks I4–I8 pass; row 17 run (empty form + `Place order` → Name message, Phone message and `Add something to the cart first.`; then Hoodie in the cart, Name `An`, Phone `090123456` → only the Phone message); row 16 run (order confirmed, cart `0 items`, address bar still `http://localhost:5173/`); row 20 read — the only state is the three field values, `tried` and `confirmation`; no effect syncs errors
-- **Why:** an error is a function of the field and of `tried`, so it cannot be out of date. The regex `^0\d{9}$` rejects empty, 9 digits, 11 digits and letters (check I6). Alternative considered: using a form library (`react-hook-form` / Formik) or duplicating error states in `useEffect`; computing errors directly on render is single-source-of-truth and completely eliminates synchronization bugs without extra dependencies.
+- **Why:** an error is a function of the field and of `tried`, so it cannot be out of date. The regex `^0\d{9}$` rejects empty, 9 digits, 11 digits and letters (check I6). Added in the 2026-11-16 review, not recorded when the code was written: an alternative was using a form library (`react-hook-form` / Formik) or duplicating error states in `useEffect`; computing errors directly on render is single-source-of-truth and completely eliminates synchronization bugs without extra dependencies.
 - **Sentence sent:** none — nothing to correct
 
 ### 3. Latest search wins: abort in the effect cleanup, plus a 250 ms debounce
 - **Where:** commit aa3c131, `src/useProducts.js` lines 14–17 (debounce), 20–22 (`AbortController`, `fetch`), 32 (`AbortError` ignored), 36 (`controller.abort()` in cleanup)
 - **Decision:** kept
 - **What decided it:** row 7 run (mode `out-of-order`, clear the box, type `sc`, wait 3 s: only the scarf, no `Could not load products.`); row 8 run (typing `cap` slowly: requests `c`, `ca`, `cap`, nothing more while idle); checks C7 and C8; `npm run lint` silent with the hooks rules (dependencies `[debounced, attempt]`)
-- **Why:** the cleanup aborts the previous request, so an old answer can never overwrite a newer one; an aborted request is treated as dropped, not as a failure. 250 ms is under the 300 ms allowed by `brief.md`. Alternative considered: combining the debounce timer and the fetch into a single `useEffect`; keeping `debounced` as a separate state with its own timer effect isolates the timer cancellation from the network `AbortController`, and crucially lets `retry()` bypass the debounce delay and trigger an immediate fetch.
+- **Why:** the cleanup aborts the previous request, so an old answer can never overwrite a newer one; an aborted request is treated as dropped, not as a failure. 250 ms is under the 300 ms allowed by `brief.md`. Added in the 2026-11-16 review, not recorded when the code was written: an alternative was combining the debounce timer and the fetch into a single `useEffect`; keeping `debounced` as a separate state with its own timer effect keeps the timer separate from the network `AbortController`. At `aa3c131` `retry()` did not use this yet; entry 9 is the later fix that sets `debounced` from `retry()`.
 - **Sentence sent:** none — nothing to correct
 
 ### 4. Cart keeps whole products, count and total computed
@@ -62,7 +62,7 @@ Rows below are the *Done means* rows of `README.md`; "run" means I ran it in Chr
 - **Where:** commit fac426b, no line changed (Bootstrap's `.btn:focus-visible` and `.form-control:focus` rules from `bootstrap.min.css`)
 - **Decision:** kept
 - **What decided it:** row 18 run — `Tab` from the search box reaches `Place order` in 28 presses, in reading order. Measured `box-shadow` right after focus was `0px`, which looked like "no focus ring". Re-measured after 250 ms: a 4 px ring on Details, Add to cart, Save, Name, Phone, Note and Place order — the first number was taken in the middle of Bootstrap's 0.15 s transition.
-- **Why:** nothing to fix in code, so no custom CSS was added. This was an important lesson in measurement methodology: Bootstrap applies a 0.15 s ease-in-out transition on focus styles, so immediate sampling resulted in a false negative. The framework styling was already fully compliant, so writing override CSS would have been redundant and fragile.
+- **Why:** nothing to fix in code, so no custom CSS was added. Bootstrap applies a 0.15 s transition to focus styles, so the first measurement was taken in the middle of it.
 - **Sentence sent:** none — nothing to correct
 
 ### 8. Wishlist context value rebuilt on every render
